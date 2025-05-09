@@ -113,7 +113,7 @@ TEST_CASE("Encode ASD", "[encoding]" ) {
     CHECK(payload_node);
     byte_node = payload_node.child("AdvisorySituationData").child("bytes");
     CHECK(byte_node);
-    CHECK(std::strcmp(byte_node.text().get(), ASD_BSM_HEX) == 0);
+    CHECK(std::strcmp(byte_node.text().get(), ASD_BSM_HEX) == 0); // TODO: fix assertion failing after increasing OCTET STRING constraint of advisoryMessage to 7000
 }
 
 /**
@@ -171,7 +171,7 @@ TEST_CASE("Encode ASD_1609", "[encoding]" ) {
     CHECK(std::strcmp(byte_node.text().get(), ONE609_BSM_HEX) == 0);
     byte_node = payload_node.child("AdvisorySituationData").child("bytes");
     CHECK(byte_node);
-    CHECK(std::strcmp(byte_node.text().get(), ASD_ONE609_HEX) == 0);
+    CHECK(std::strcmp(byte_node.text().get(), ASD_ONE609_HEX) == 0); // TODO: fix assertion failing after increasing OCTET STRING constraint of advisoryMessage to 7000
 }
 
 /**
