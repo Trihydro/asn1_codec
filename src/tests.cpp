@@ -539,3 +539,54 @@ TEST_CASE("Http_Server::post_batch (application/x-ndjson)", "[decoding][http_ser
     CHECK(response.body.find("<SensorDataSharingMessage>") != std::string::npos);
     CHECK(response.body.find("<RoadSafetyMessage>") != std::string::npos);
 }
+
+/**
+ * A DataFrame can have 1 to 16 regions. 7 regions is a valid case.
+ */
+TEST_CASE("Encode ASD TIM with 7 regions should succeed", "[encoding][asd]") {
+    std::cout << "=== Encode ASD TIM with 7 regions should succeed ===" << std::endl;
+
+    // prepare
+    asn1_codec.setup_logger_for_testing();
+
+    std::stringstream out10;
+    CHECK(asn1_codec.file_test("data/InputData.encoding.asd.tim.7regions.441nodes.xml", out10) == EXIT_SUCCESS);
+    parse_result = output_doc.load(out10, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_trim_pcdata);
+    CHECK(parse_result);
+    payload_node = ode_payload_query.evaluate_node(output_doc).node();
+    CHECK(payload_node);
+}
+
+/**
+* 16 regions is the maximum number of regions allowed in a DataFrame.
+*/
+TEST_CASE("Encode ASD TIM with 16 regions should succeed", "[encoding][asd]") {
+    std::cout << "=== Encode ASD TIM with 16 regions should succeed ===" << std::endl;
+
+    // prepare
+    asn1_codec.setup_logger_for_testing();
+
+    std::stringstream out10;
+    CHECK(asn1_codec.file_test("data/InputData.encoding.asd.tim.16regions.1008nodes.xml", out10) == EXIT_SUCCESS);
+    parse_result = output_doc.load(out10, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_trim_pcdata);
+    CHECK(parse_result);
+    payload_node = ode_payload_query.evaluate_node(output_doc).node();
+    CHECK(payload_node);
+}
+
+/**
+* 17 regions is not allowed in a DataFrame.
+*/
+TEST_CASE("Encode ASD TIM with 17 regions should fail", "[encoding][asd]") {
+    std::cout << "=== Encode ASD TIM with 17 regions should fail ===" << std::endl;
+
+    // prepare
+    asn1_codec.setup_logger_for_testing();
+
+    std::stringstream out10;
+    CHECK(asn1_codec.file_test("data/InputData.encoding.asd.tim.17regions.1071nodes.invalid.xml", out10) == EXIT_FAILURE);
+    parse_result = output_doc.load(out10, pugi::parse_default | pugi::parse_declaration | pugi::parse_doctype | pugi::parse_trim_pcdata);
+    CHECK(parse_result);
+    payload_node = ode_payload_query.evaluate_node(output_doc).node();
+    CHECK(payload_node);
+}
