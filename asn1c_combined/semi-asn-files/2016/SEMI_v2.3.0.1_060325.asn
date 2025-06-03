@@ -1,6 +1,7 @@
--- Version: 2.3.0-draft
--- Date: 2016-07-06
--- Updated by Frank perry at Leidos
+-- Version: 2.3.0.1-draft
+-- Date: 2025-06-03
+-- Updated by Daniel McCoy Stephenson at Trihydro Corporation
+-- Previously updated by Frank perry at Leidos
 -- Developed by Purser Sturgeon II
 -- at Southwest Research Institute
 -- for the USDOT Connected Vehicle Test Bed
@@ -28,6 +29,7 @@
 --			Add TimeToLive to ServiceRecord
 --			Changed Weather/wipers/DSRC.WiperStatusFront to DSRC.WiperStatus
 --			Changed Weather/wipers/DSRC.WiperStatusRear to DSRC.WiperStatus
+-- 2.3.0.1:	Updated OCTET STRING constraint for advisoryMessage to (0..7000) to support multi-region ASD TIMs
 
 
 SEMI DEFINITIONS AUTOMATIC TAGS ::= BEGIN
@@ -411,13 +413,13 @@ AdvisoryDetails ::= SEQUENCE {
 	distType		DistributionType,
 	startTime		DSRC.DFullTime	OPTIONAL,
 	stopTime		DSRC.DFullTime	OPTIONAL,
-	advisoryMessage	OCTET STRING (SIZE(0..1400))	-- Encoded advisory message
+	advisoryMessage	OCTET STRING (SIZE(0..7000))	-- Encoded advisory message
 }
 
 AdvisoryBroadcast ::= SEQUENCE {
 	messagePsid		Psid,								-- PSID of advisory message
 	broadcastInst	BroadcastInstructions OPTIONAL,		-- Broadcast instructions
-	advisoryMessage	OCTET STRING (SIZE(0..1400))		-- Encoded advisory message
+	advisoryMessage	OCTET STRING (SIZE(0..7000))		-- Encoded advisory message
 }
 
 BroadcastInstructions ::= SEQUENCE {
